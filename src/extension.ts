@@ -18,30 +18,37 @@ export function activate(context: vscode.ExtensionContext) {
 		setTimeout(function () {
 			try {
 				let { activeTextEditor } = vscode.window;
+				let container: PartItem[] = [];
 				if (activeTextEditor) {
 					let { document } = activeTextEditor;
 					const n = document.lineCount;
 					const reg = new RegExp(oldVar, 'g');
-					const pp = new RegExp(oldVar);
 					for (let i = 0; i < n; i++) {
 						let lineText = document.lineAt(i);
-
-						if (pp.test(lineText.text)) {
-							// setTimeout(function () {
+						if (reg.test(lineText.text)) {
 							let newText = lineText.text.replace(reg, newVar);
-							activeTextEditor?.edit((edit) => {
-								edit.replace(lineText.range, newText);
+							container.push({
+								range: lineText.range,
+								text: newText
 							});
-							document.save();
-							// }, 200);
 						}
 					}
+
+					activeTextEditor.edit(edit => {
+						let n = container.length;
+						for (let i = 0; i < n; i++) {
+							let { range, text } = container[i];
+							edit.replace(range, text);
+						}
+						document.save();
+						let tips = n ? `All variables '${oldVar}' will be switched to '${newVar}'` : 'No matching variable found';
+						vscode.window.showInformationMessage(tips);
+					});
 				}
 
 			} catch (err) {
 				console.log(err);
 			}
-			vscode.window.showInformationMessage(`All variables '${oldVar}' will be switched to '${newVar}'`);
 		}, 200);
 
 	});
@@ -57,6 +64,11 @@ const enum Style {
 	camelCase = 'camelCase',
 	kebabCase = 'kebabCase',
 	snakeCase = 'snakeCase'
+}
+
+interface PartItem {
+	range: vscode.Range;
+	text: string;
 }
 
 const toVariableStyle = (str: string, style: Style) => {
