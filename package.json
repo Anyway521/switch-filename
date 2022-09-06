@@ -20,7 +20,7 @@
       "properties": {
         "switch-filename.variableStyle": {
           "type": "string",
-          "default": "pascalCase",
+          "default": "all",
           "description": "will change variable to camelCase"
         }
       }

@@ -1,6 +1,25 @@
 import * as vscode from 'vscode';
 import * as _ from 'lodash';
 
+// 目前支持的所有格式
+enum Style {
+	pascalCase = 'pascalCase',
+	camelCase = 'camelCase',
+	kebabCase = 'kebabCase',
+	snakeCase = 'snakeCase',
+}
+
+// 用于编辑器根据位置修改文字
+interface PartItem {
+	range: vscode.Range;
+	text: string;
+}
+// 用于匹配
+interface RegPair {
+	reg: RegExp,
+	text: string
+}
+
 export function activate(context: vscode.ExtensionContext) {
 
 	console.log('Congratulations, your extension "switch-filename" is now active!');
@@ -9,31 +28,25 @@ export function activate(context: vscode.ExtensionContext) {
 		const { files: [{ oldUri, newUri }] } = file;
 		const oldName = getNameFromPath(oldUri.path);
 		const newName = getNameFromPath(newUri.path);
-
 		const config = vscode.workspace.getConfiguration('switch-filename');
 		const { variableStyle: style } = config;
-
-		const oldVar = toVariableStyle(oldName, style);
-		const newVar = toVariableStyle(newName, style);
 		setTimeout(function () {
 			try {
 				let { activeTextEditor } = vscode.window;
-				let container: PartItem[] = [];
 				if (activeTextEditor) {
 					let { document } = activeTextEditor;
+					let container: PartItem[] = [];
+					const { reg, regPair } = getRegInfoFromStr(oldName, newName, style);
 					const n = document.lineCount;
-					const reg = new RegExp(oldVar, 'g');
 					for (let i = 0; i < n; i++) {
 						let lineText = document.lineAt(i);
 						if (reg.test(lineText.text)) {
-							let newText = lineText.text.replace(reg, newVar);
 							container.push({
 								range: lineText.range,
-								text: newText
+								text: replaceTextWithReg(lineText.text, regPair)
 							});
 						}
 					}
-
 					activeTextEditor.edit(edit => {
 						let n = container.length;
 						for (let i = 0; i < n; i++) {
@@ -41,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
 							edit.replace(range, text);
 						}
 						document.save();
-						let tips = n ? `All variables '${oldVar}' will be switched to '${newVar}'` : 'No matching variable found';
+						let tips = n ? `All variables switched successfully` : 'No matching variable found';
 						vscode.window.showInformationMessage(tips);
 					});
 				}
@@ -50,7 +63,6 @@ export function activate(context: vscode.ExtensionContext) {
 				console.log(err);
 			}
 		}, 200);
-
 	});
 
 	context.subscriptions.push(disposable);
@@ -59,19 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 // this method is called when your extension is deactivated
 export function deactivate() { }
 
-const enum Style {
-	pascalCase = 'pascalCase',
-	camelCase = 'camelCase',
-	kebabCase = 'kebabCase',
-	snakeCase = 'snakeCase'
-}
-
-interface PartItem {
-	range: vscode.Range;
-	text: string;
-}
-
-const toVariableStyle = (str: string, style: Style) => {
+const toVariableStyle = (str: string, style: Style | undefined) => {
 	switch (style) {
 		case Style.camelCase:
 			return _.camelCase(str);
@@ -84,6 +84,44 @@ const toVariableStyle = (str: string, style: Style) => {
 		default:
 			return str;
 	}
+};
+
+const toAllStyle = (str: string) => {
+	return Object.values(Style).map(item => {
+		return toVariableStyle(str, item);
+	});
+};
+
+const getRegInfoFromStr = (oldStr: string, newStr: string, style: Style | 'all') => {
+	const oldVarList = style === 'all' ? toAllStyle(oldStr) : [toVariableStyle(oldStr, style)];
+	const newVarList = style === 'all' ? toAllStyle(newStr) : [toVariableStyle(newStr, style)];
+
+	const regText = oldVarList.reduce((prev, cur, index) => {
+		prev += cur + (index !== oldVarList.length - 1 ? '|' : ')');
+		return prev;
+	}, '(');
+
+	// 用于读
+	const reg = new RegExp(regText, 'i');
+
+	// 用于写
+	const regPair: RegPair[] = oldVarList.map((item, index) => {
+		return {
+			reg: new RegExp(item, 'gi'),
+			text: newVarList[index]
+		};
+	});
+
+	return {
+		reg,
+		regPair
+	};
+};
+
+const replaceTextWithReg = (str: string, regPair: RegPair[]) => {
+	return regPair.reduce((prev, cur) => {
+		return prev.replace(cur.reg, cur.text);
+	}, str);
 };
 
 const getNameFromPath = (path: string) => {
