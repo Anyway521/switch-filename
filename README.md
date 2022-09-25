@@ -1,14 +1,10 @@
-# switch-filename README
+## Switch - Filename  
 
-"switch-filename". After writing up a brief description, we recommend including the following sections.
+In fact, this plugin is dedicated to changing the variables in the file content that contain vocabulary related to the file name when you change the file name.
 
-## Features
+For example, there is a file named "my_app.vue", the file contains variables that contain the keywords "MyApp", "my-app", "myApp", "my_app", when you rename the file to "my_demo", the keywords of the variables in the file are automatically replaced with "MyDemo", "my-demo", "myDemo", "my_demo".
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
+\!\[feature X\]\(image/gif1.gif\)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 

@@ -30,6 +30,10 @@ export function activate(context: vscode.ExtensionContext) {
 		const newName = getNameFromPath(newUri.path);
 		const config = vscode.workspace.getConfiguration('switch-filename');
 		const { variableStyle: style } = config;
+		if (style !== 'all' && !Object.values(Style).includes(style)) {
+			vscode.window.showInformationMessage('Please make sure that the entered configuration is correct');
+			return;
+		}
 		setTimeout(function () {
 			try {
 				let { activeTextEditor } = vscode.window;
@@ -60,7 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 
 			} catch (err) {
-				console.log(err);
+				vscode.window.showInformationMessage(err as string);
 			}
 		}, 200);
 	});
