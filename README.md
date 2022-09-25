@@ -4,64 +4,31 @@ In fact, this plugin is dedicated to changing the variables in the file content 
 
 For example, there is a file named "my_app.vue", the file contains variables that contain the keywords "MyApp", "my-app", "myApp", "my_app", when you rename the file to "my_demo", the keywords of the variables in the file are automatically replaced with "MyDemo", "my-demo", "myDemo", "my_demo".
 
-\!\[feature X\]\(image/gif1.gif\)
+![feature X](https://raw.githubusercontent.com/Anyway521/switch-filename/main/image/gif1.gif)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+> Tip: Based on the image above, you may already be aware of the use case for this plugin, when you need to make small adjustments to the file (no time for refactoring). If your project already has a lot of files to do the above, re-creating a project might be a better option.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+The file keyword styles currently supported by this plugin include "pascalCase", "camelCase", "kebabCase", and "snakeCase". 
 
-For example:
+* `switch-filename.variableStyle`: Switch modes for keywords:.
 
-This extension contributes the following settings:
+Two switching modes are supported, which can be set by the variable `switch-filename.variableStyle`.
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+-  `all` (default)  
+    When "switch-filename.variableStyle" is set to "all",  the keywords of the above four styles will be replaced.
+-  `pascalCase` or `camelCase` or `kebabCase` or `snakeCase`  
+   When "switch-filename.variableStyle" is set to "pascalCase", only pascalCase style keywords will be replaced, the same with several others.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
 
-### 1.0.1
+## Resources
 
-Fixed issue #.
+ - [Github](https://github.com/Anyway521/switch-filename)
 
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## WeChat
+24115z
