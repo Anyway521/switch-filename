@@ -1,6 +1,7 @@
 {
   "name": "switch-filename",
   "displayName": "switch-filename",
+  "publisher": "Destiny",
   "description": "",
   "version": "0.0.1",
   "engines": {
