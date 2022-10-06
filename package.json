@@ -4,10 +4,11 @@
     "name": "chris",
     "email": "2411535738@qq.com"
   },
+  "icon": "image/icon.png",
   "displayName": "switch-filename",
   "publisher": "Destiny",
   "description": "A plugin that can help you batch change files",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.70.0"
   },
