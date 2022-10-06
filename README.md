@@ -31,4 +31,4 @@ Two switching modes are supported, which can be set by the variable `switch-file
  - [Github](https://github.com/Anyway521/switch-filename)
 
 ## WeChat
-24115z
+z24115
