@@ -1,8 +1,12 @@
 {
   "name": "switch-filename",
+  "author": {
+    "name": "chris",
+    "email": "2411535738@qq.com"
+  },
   "displayName": "switch-filename",
   "publisher": "Destiny",
-  "description": "",
+  "description": "A plugin that can help you batch change files",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.70.0"
@@ -51,5 +55,9 @@
   },
   "dependencies": {
     "lodash": "^4.17.21"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anyway521/switch-filename.git"
   }
 }
